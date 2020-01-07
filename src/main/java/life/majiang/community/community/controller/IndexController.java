@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * created by huang on 2020/1/7
  */
 @Controller
-public class HollerController {
+public class IndexController {
 
     @GetMapping("hello")
     public String hello(@RequestParam(name = "name") String name, Model model){
