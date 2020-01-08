@@ -6,6 +6,24 @@ public class AccessTokenDTO {
     private String login;
     private String scope;
     private String state;
+    private String Code;
+    private String client_secret;
+
+    public String getClient_secret() {
+        return client_secret;
+    }
+
+    public void setClient_secret(String client_secret) {
+        this.client_secret = client_secret;
+    }
+
+    public String getCode() {
+        return Code;
+    }
+
+    public void setCode(String code) {
+        Code = code;
+    }
 
     public String getClient_id() {
         return client_id;
