@@ -20,6 +20,12 @@ public class IndexController {
 
     @Autowired
     private UserMapper userMapper;
+
+    /**
+     * 主页面处理，免登陆验证COOKIR和SESSION
+     * @param request
+     * @return
+     */
     @GetMapping("/")
     public String hello(HttpServletRequest request) {
         //获取cookie
