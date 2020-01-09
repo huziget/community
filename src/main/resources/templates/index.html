@@ -22,6 +22,9 @@
                     <input type="text" class="form-control" placeholder="搜索问题">
                 </div>
                 <button type="submit" class="btn btn-default">搜索</button>
+                <button type="submit" class="btn btn-success btn-lg">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 发布问题
+                </button>
             </form>
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown" th:if="${session.user != null}">
