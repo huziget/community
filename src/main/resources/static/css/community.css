@@ -1,0 +1,13 @@
+body{
+    background-image:url(timg.jpg);
+    background-repeat:no-repeat;
+}
+.main{
+    background-color: white;
+    margin:30px;
+}
+
+.btn-publish{
+    float: right;
+    margin-bottom: 15px;
+}
