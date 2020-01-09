@@ -6,4 +6,4 @@ CREATE TABLE USER
     TOKEN varchar(36),
     GMT_CREATE bigint,
     GMT_MODIFIED bigint
-)
+);
