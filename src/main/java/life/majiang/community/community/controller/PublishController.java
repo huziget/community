@@ -47,6 +47,10 @@ public class PublishController {
             @RequestParam("description") String description,
             @RequestParam("tag") String tag, HttpServletRequest request,
             Model model) {
+        //把值存入Model
+        model.addAttribute("title",title);
+        model.addAttribute("description",description);
+        model.addAttribute("tag",tag);
         //前端数据检验
         if(title == null || "".equals(title)){
             model.addAttribute("erro","标题不能为空");
@@ -62,10 +66,6 @@ public class PublishController {
             model.addAttribute("erro","标签不能为空");
             return "publish";
         }
-        //把值存入Model
-        model.addAttribute("title",title);
-        model.addAttribute("description",description);
-        model.addAttribute("tag",tag);
 
         User user = null;
         //获取cookie
