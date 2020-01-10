@@ -5,6 +5,7 @@ import life.majiang.community.community.Entity.Question;
 import life.majiang.community.community.Entity.User;
 import life.majiang.community.community.Mapper.QuestionMapper;
 import life.majiang.community.community.Mapper.UserMapper;
+import life.majiang.community.community.dto.PaginationDTO;
 import life.majiang.community.community.dto.QuestionDTO;
 import life.majiang.community.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,9 @@ public class IndexController {
      * @return
      */
     @GetMapping("/")
-    public String hello(HttpServletRequest request,Model model) {
+    public String hello(HttpServletRequest request, Model model,
+                        @RequestParam(value = "page", defaultValue = "1") Integer page,
+                        @RequestParam(value = "size", defaultValue = "5") Integer size) {
         //获取cookie
         Cookie[] cookies = request.getCookies();
         //首次进入页面，不验证
@@ -56,9 +59,9 @@ public class IndexController {
             }
         }
         //获取问题列表
-        List<QuestionDTO> questionList = questionService.searchQuestionList();
+        PaginationDTO pagination = questionService.searchQuestionList(page, size);
         //添加到MODEL，传给前端
-        model.addAttribute("questions", questionList);
+        model.addAttribute("pagination", pagination);
         //去往主页
         return "index";
     }

@@ -4,6 +4,7 @@ import life.majiang.community.community.Entity.Question;
 import life.majiang.community.community.Entity.User;
 import life.majiang.community.community.Mapper.QuestionMapper;
 import life.majiang.community.community.Mapper.UserMapper;
+import life.majiang.community.community.dto.PaginationDTO;
 import life.majiang.community.community.dto.QuestionDTO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +29,16 @@ public class QuestionService {
     /**
      * 获取所有问题列表
      * @return
+     * @param page
+     * @param size
      */
-    public List<QuestionDTO> searchQuestionList() {
+    public PaginationDTO searchQuestionList(Integer page, Integer size) {
+        //分页公式转换
+        Integer offset = size*(page-1);
         //从数据获取问题列表
-        List<Question> questions = questionMapper.List();
+        List<Question> questions = questionMapper.List(offset, size);
         List<QuestionDTO> questionDTOList = new ArrayList<>();
+        PaginationDTO paginationDTO = new PaginationDTO();
         //循环列表
         for(Question question: questions){
             //通过问题对象中的ID 查询USER
@@ -45,7 +51,12 @@ public class QuestionService {
             //加入到DTO集合（questionDTO）
             questionDTOList.add(questionDTO);
         }
+        //把所有数据传入到pagination
+        paginationDTO.setQuestions(questionDTOList);
+
+        Integer questionCount = questionMapper.selectQuestionCount();
+        paginationDTO.setPagination(questionCount, page, size);
         //返回值
-        return questionDTOList;
+        return paginationDTO;
     }
 }
