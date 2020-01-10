@@ -57,7 +57,7 @@ public class AuthorizeController {
         String accessToken = gitHubProvider.getAccessTokenDTO(accessTokenDTO);
         //第三次交互，获取到github用户的信息
         GitUser gitUser = gitHubProvider.getGitUser(accessToken);
-        if(gitUser!=null){
+        if(gitUser!=null && gitUser.getId() != null){
             //通过实体USER接受用户信息
             User user = new User();
             String token = UUID.randomUUID().toString();
