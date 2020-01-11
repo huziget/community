@@ -38,7 +38,7 @@ public class IndexController {
     @GetMapping("/")
     public String hello(HttpServletRequest request, Model model,
                         @RequestParam(value = "page", defaultValue = "1") Integer page,
-                        @RequestParam(value = "size", defaultValue = "5") Integer size) {
+                        @RequestParam(value = "size", defaultValue = "8") Integer size) {
         //获取cookie
         Cookie[] cookies = request.getCookies();
         //首次进入页面，不验证

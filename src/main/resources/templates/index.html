@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>虎子社区</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" href="css/bootstrap.min.css"/>
     <link rel="stylesheet" href="css/bootstrap-theme.min.css"/>
     <link rel="stylesheet" href="css/community.css"/>
@@ -12,10 +12,11 @@
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                 <span class="sr-only">虎子社区</span>
             </button>
-                <a class="navbar-brand" href="/">虎子社区</a>
+            <a class="navbar-brand" href="/">虎子社区</a>
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <form class="navbar-form navbar-left">
@@ -27,10 +28,11 @@
             <ul class="nav navbar-nav navbar-right">
                 <li th:if="${session.user != null}">
                     <!--<a class="glyphicon glyphicon-plus" href="/publish">发布</a>-->
-                    <h3> <a class="label label-success" href="/publish" >发布</a></h3>
+                    <h3><a class="label label-success" href="/publish">发布</a></h3>
                 </li>
                 <li class="dropdown" th:if="${session.user != null}">
-                    <h3><a href="#" class="label label-default" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" th:text="${session.user.getName()}">
+                    <h3><a href="#" class="label label-default" data-toggle="dropdown" role="button"
+                           aria-haspopup="true" aria-expanded="false" th:text="${session.user.getName()}">
                         <span class="caret"></span></a></h3>
                     <ul class="dropdown-menu">
                         <li><a href="#">消息中心</a></li>
@@ -39,7 +41,7 @@
                     </ul>
                 </li>
                 <li th:if="${session.user == null}">
-                <a href="https://github.com/login/oauth/authorize?client_id=1e15e2901e9c2ad86816&redirect_uri=http://localhost:8887/callback&scope=user&state=1">登录</a>
+                    <a href="https://github.com/login/oauth/authorize?client_id=1e15e2901e9c2ad86816&redirect_uri=http://localhost:8887/callback&scope=user&state=1">登录</a>
                 </li>
             </ul>
         </div>
@@ -54,7 +56,7 @@
                 <div class="media-left">
                     <a href="#">
                         <img class="media-images img-rounded" style="height: 38px;width: 38px;"
-                              th:if="${question.user.avatarUrl == null}">
+                             th:if="${question.user.avatarUrl == null}">
                         <img class="media-object img-rounded" style="height: 38px;width: 38px;"
                              th:src="${question.user.avatarUrl}" th:if="${question.user.avatarUrl != null}">
                     </a>
@@ -62,9 +64,38 @@
                 <div class="media-body">
                     <h4 class="media-heading" th:text="${question.title}"></h4>
                     <span th:text="${question.description}"></span><br>
-                    <span class="text-desc"><span th:text="${question.commentCount}"></span> 个回复 * <span th:text="${question.viewCount}"></span> 次浏览 * <span th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm')}"></span></span>
+                    <span class="text-desc"><span th:text="${question.commentCount}"></span> 个回复 * <span
+                            th:text="${question.viewCount}"></span> 次浏览 * <span
+                            th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm')}"></span></span>
                 </div>
             </div>
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    <li th:if="${pagination.showPrevious}">
+                        <a th:href="@{/(page=1)}" aria-label="FirstPage">
+                            <span aria-hidden="true">首页</span>
+                        </a>
+                    </li>
+                    <li th:if="${pagination.showFirstPage}">
+                        <a th:href="@{/(page=${pagination.page - 1})}" aria-label="Previous">
+                            <span aria-hidden="true">上一页</span>
+                        </a>
+                    </li>
+                    <li th:each="page : ${pagination.pages}" th:class="${pagination.page == page}?'active':''">
+                        <a th:text="${page}" th:href="@{/(page=${page})}" >
+                        </a></li>
+                    <li th:if="${pagination.showNext}">
+                        <a th:href="@{/(page=${pagination.page+1})}" aria-label="Next">
+                            <span aria-hidden="true">下一页</span>
+                        </a>
+                    </li>
+                    <li th:if="${pagination.showNext}">
+                        <a th:href="@{/(page=${pagination.totalPage})}" aria-label="EndPage">
+                            <span aria-hidden="true">尾页</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
         </div>
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
             <h3>热门话题</h3>

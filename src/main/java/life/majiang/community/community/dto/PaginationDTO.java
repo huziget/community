@@ -2,6 +2,7 @@ package life.majiang.community.community.dto;
 
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,7 +18,8 @@ public class PaginationDTO {
     private boolean showEndPage;
 
     private int page;
-    private List<Integer> pages;
+    private Integer totalPage;
+    private List<Integer> pages = new ArrayList<>();
 
     /**
      * 计算页码页数等
@@ -26,28 +28,63 @@ public class PaginationDTO {
      * @param size
      */
     public void setPagination(Integer questionCount, Integer page, Integer size) {
-        //计算总页数
-        Integer totalPage = 0;
         //页码正好的时候
-        if (questionCount / size == 0) {
+        if (questionCount % size == 0) {
             totalPage = questionCount / size;
         } else {
             //页码取余的时候
             totalPage = questionCount / size + 1;
         }
 
+        //页码越界处理
+        if(page < 1){
+            page = 1;
+        }
+        if(page > totalPage){
+            page = totalPage;
+        }
+        //赋值页码
+        this.page =  page;
+        //页面显示页码
+        pages.add(page);
+        for(int i = 1; i <= 3; i++){
+            if(page - i > 0){
+                //头部插入
+                pages.add(0,page - i);
+            }
+            if(page + i <= totalPage){
+                //尾部插入
+                pages.add(page + i);
+            }
+        }
+
         //是否展示上一页
         if(page == 1){
-            showFirstPage = false;
+            showPrevious= false;
         }else {
-            showEndPage = true;
+            showPrevious = true;
         }
 
         //是否展示下一页
         if(page == totalPage){
-            showEndPage = false;
+            showNext = false;
+        } else {
+            showNext = true;
+        }
+
+        //是否展示第一页
+        if(pages.contains(1)){
+            showFirstPage = false;
         } else {
             showFirstPage = true;
         }
+
+        //是否展示最后一页
+        if (pages.contains(totalPage)) {
+            showEndPage = false;
+        } else {
+            showEndPage = true;
+        }
+
     }
 }

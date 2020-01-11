@@ -33,12 +33,17 @@ public class QuestionService {
      * @param size
      */
     public PaginationDTO searchQuestionList(Integer page, Integer size) {
-        //分页公式转换
-        Integer offset = size*(page-1);
-        //从数据获取问题列表
-        List<Question> questions = questionMapper.List(offset, size);
-        List<QuestionDTO> questionDTOList = new ArrayList<>();
         PaginationDTO paginationDTO = new PaginationDTO();
+        //数据总行数
+        Integer questionCount = questionMapper.selectQuestionCount();
+        //分页处理
+        paginationDTO.setPagination(questionCount, page, size);
+        //分页公式转换
+        Integer offset = size*(paginationDTO.getPage()-1);
+        //从数据获取问题列表
+        List<QuestionDTO> questionDTOList = new ArrayList<>();
+        //获取分页数据
+        List<Question> questions = questionMapper.List(offset, size);
         //循环列表
         for(Question question: questions){
             //通过问题对象中的ID 查询USER
@@ -53,9 +58,6 @@ public class QuestionService {
         }
         //把所有数据传入到pagination
         paginationDTO.setQuestions(questionDTOList);
-
-        Integer questionCount = questionMapper.selectQuestionCount();
-        paginationDTO.setPagination(questionCount, page, size);
         //返回值
         return paginationDTO;
     }
