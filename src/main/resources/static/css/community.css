@@ -31,3 +31,7 @@ body{
     background-image:url(images/user1.jpg);
     height: 50px;width: 50px;
 }
+
+.profile .section{
+    margin-top: 17px;
+}

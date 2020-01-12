@@ -37,12 +37,13 @@ public class PaginationDTO {
         }
 
         //页码越界处理
-        if(page < 1){
-            page = 1;
-        }
         if(page > totalPage){
             page = totalPage;
         }
+        if(page < 1){
+            page = 1;
+        }
+
         //赋值页码
         this.page =  page;
         //页面显示页码
