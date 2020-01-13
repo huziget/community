@@ -5,6 +5,7 @@ import life.majiang.community.community.Mapper.UserMapper;
 import life.majiang.community.community.dto.AccessTokenDTO;
 import life.majiang.community.community.dto.GitUser;
 import life.majiang.community.community.provider.GitHubProvider;
+import life.majiang.community.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
@@ -35,6 +37,9 @@ public class AuthorizeController {
 
     @Value("${github.redirect.url}")
     private String redirectUri;
+
+    @Autowired
+    private UserService userService;
 
     /**
      *登陆后跳转功能
@@ -65,10 +70,8 @@ public class AuthorizeController {
             user.setName(gitUser.getName());
             user.setAvatarUrl(gitUser.getAvatarUrl());
             user.setAccountId(String.valueOf(gitUser.getId()));
-            user.setGmtCreate(System.currentTimeMillis());
-            user.setGmtModified(user.getGmtCreate());
             //保存到数据库
-            userMapper.insert(user);
+            userService.editOrAddUser(user);
             //信息存到本地浏览器
             response.addCookie(new Cookie("token",token));
             //跳转页面
@@ -77,5 +80,13 @@ public class AuthorizeController {
             //登录失败
             return "redirect:/";
         }
+    }
+
+    @GetMapping("/loginOut")
+    public String loginOut(HttpServletRequest request,HttpServletResponse response){
+        request.getSession().removeAttribute("user");
+        new Cookie("token",null);
+//        response.addCookie();
+        return "redirect:/";
     }
 }

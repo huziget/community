@@ -1,0 +1,2 @@
+alter table USER
+	add GMT_UPDATEDATA BIGINT;

@@ -2,10 +2,7 @@ package life.majiang.community.community.Mapper;
 
 
 import life.majiang.community.community.Entity.User;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 /**
  * user用户交互Dao层
@@ -29,6 +26,26 @@ public interface UserMapper {
     @Select("select * from user where token = #{token}")
     User findByToken(@Param("token") String token);
 
+    /**
+     * 根据Id查找用户信息
+     * @param id
+     * @return
+     */
     @Select("select * from user where id = #{id}")
     User findById(@Param("id") Integer id);
+
+    /**
+     * 根据AccountId 效验数据库是否存在
+     * @param accountId
+     * @return
+     */
+    @Select("select * from user where ACCOUNT_ID = #{accountId}")
+    User selectByAccountId(@Param("accountId") String accountId);
+
+    /**
+     * 更新数据
+     * @param dbUser
+     */
+    @Update("update user set name = #{name},token = #{token},GMT_UPDATEDATA = #{gmtUpdateData},AVATAR_URL = #{avatarUrl} where ACCOUNT_ID = #{accountId}")
+    void updateUser(User dbUser);
 }

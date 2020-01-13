@@ -19,8 +19,8 @@
             <div class="media" th:each="question : ${pagination.questions}">
                 <div class="media-left">
                     <a href="#">
-                        <img class="media-images img-rounded" style="height: 38px;width: 38px;"
-                             th:if="${question.user.avatarUrl == null}">
+<!--                        <img class="media-images img-rounded" style="height: 38px;width: 38px;"-->
+<!--                             th:if="${question.user.avatarUrl == null}">-->
                         <img class="media-object img-rounded" style="height: 38px;width: 38px;"
                              th:src="${question.user.avatarUrl}" th:if="${question.user.avatarUrl != null}">
                     </a>
@@ -78,7 +78,7 @@
         </div>
     </div>
 </div>
-<div style="text-align: center">Designed and built with all the love in the world by @mdo and @fat. <br>
+<div style="text-align: center;color: #999999" >Designed and built with all the love in the world by @mdo and @fat. <br>
     Maintained by the core team with the help of<br>
     our contributors.
     本项目源码受 MIT开源协议保护，文档受 CC BY 3.0 开源协议保护。<br>
