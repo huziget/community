@@ -23,6 +23,7 @@ body{
     color: #999;
 }
 
+
 .media-images{
     background-image:url(images/user.gif);
 }
@@ -34,4 +35,17 @@ body{
 
 .profile .section{
     margin-top: 17px;
+}
+
+.community-menu{
+    color: #999999;
+    font-size: 13px;
+}
+
+.community-creator{
+    margin-top: 23px;
+}
+
+.community-questionDate{
+    margin-top: 10px;
 }

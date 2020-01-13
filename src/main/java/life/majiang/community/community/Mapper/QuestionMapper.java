@@ -1,6 +1,7 @@
 package life.majiang.community.community.Mapper;
 
 import life.majiang.community.community.Entity.Question;
+import life.majiang.community.community.dto.QuestionDTO;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -55,4 +56,12 @@ public interface QuestionMapper {
      */
     @Select("select count(1) from question where creator = #{userId}")
     Integer selectOurselvesQuestionCount(Integer userId);
+
+    /**
+     *根据ID查找问题
+     * @param id
+     * @return
+     */
+    @Select("select * from question where id = #{id}")
+    Question selectById(@Param("id") Integer id);
 }
