@@ -58,12 +58,23 @@
                         <span aria-hidden="true">尾页</span>
                     </a>
                 </li>
+                <li class="dropup">
+                    <a class="btn btn-default dropdown-toggle" th:text="${pagination.size}+'页 ▲'" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                        <li><a th:href="@{'/profile/'+(page=${pagination.page},size = 5)}">5</a></li>
+                        <li><a th:href="@{'/profile/'+(page=${pagination.page},size = 10)}">10</a></li>
+                        <li><a th:href="@{'/profile/'+(page=${pagination.page},size = 20)}">20</a></li>
+                        <li><a th:href="@{'/profile/'+(page=${pagination.page},size = 50)}">50</a></li>
+                    </ul>
+                </li>
             </ul>
         </nav>
         </div>
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12" >
             <div class="list-group section">
-                <a href="/profile/question"  th:class="${section == 'question'}?'active list-group-item ':'list-group-item'">我的问题</a>
+                <a href="/profile/questions"  th:class="${section == 'questions'}?'active list-group-item ':'list-group-item'">我的问题</a>
                 <a href="/profile/replies"  th:class="${section == 'replies'}?'active list-group-item ':'list-group-item'">最新回复
                     <span class="badge">14</span>
                 </a>

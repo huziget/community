@@ -30,7 +30,7 @@ public interface QuestionMapper {
      * @return
      */
     @Select("select * from question limit #{offset},#{size}")
-    List<Question> List(Integer offset, Integer size);
+    List<Question> List(@Param("offset")Integer offset, @Param("size")Integer size);
 
     /**
      * 查询问题的总条数
@@ -47,7 +47,7 @@ public interface QuestionMapper {
      * @return
      */
     @Select("select * from question where creator = #{userId} limit #{offset},#{size}")
-    List<Question> selectOurselvesQuestions(@Param("userId") Integer userId, Integer offset, Integer size);
+    List<Question> selectOurselvesQuestions(@Param("userId") Integer userId, @Param("offset")Integer offset, @Param("size")Integer size);
     /**
      * 查询个人问题的总条数
      * @return

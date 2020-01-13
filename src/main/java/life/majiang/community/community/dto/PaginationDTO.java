@@ -18,6 +18,7 @@ public class PaginationDTO {
     private boolean showEndPage;
 
     private int page;
+    private int size;
     private Integer totalPage;
     private List<Integer> pages = new ArrayList<>();
 
@@ -28,12 +29,17 @@ public class PaginationDTO {
      * @param size
      */
     public void setPagination(Integer questionCount, Integer page, Integer size) {
-        //页码正好的时候
-        if (questionCount % size == 0) {
-            totalPage = questionCount / size;
-        } else {
-            //页码取余的时候
-            totalPage = questionCount / size + 1;
+        //结果是否为0
+        if(questionCount == 0){
+            totalPage = 1;
+        }else {
+            //页码正好的时候
+            if (questionCount % size == 0) {
+                totalPage = questionCount / size;
+            } else {
+                //页码取余的时候
+                totalPage = questionCount / size + 1;
+            }
         }
 
         //页码越界处理
@@ -46,6 +52,7 @@ public class PaginationDTO {
 
         //赋值页码
         this.page =  page;
+        this.size = size;
         //页面显示页码
         pages.add(page);
         for(int i = 1; i <= 3; i++){
