@@ -17,6 +17,7 @@
             <h2><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>发起</h2>
             <hr>
             <form action="/publish" method="post">
+                <input type="hidden" th:value="${id}" name = "id">
                 <div class="form-group">
                     <label for="title">问题标题 （简单扼要）:</label>
                     <input type="text" class="form-control" id="title" th:value="${title}" name="title" placeholder="问题标题....">
@@ -38,6 +39,8 @@
             *问题标题：请用精简的语言描述您要发布的问题，不超过25字。<br>
             *问题补充：详细的补充您的问题，并确保问题描述清晰直观，提供一些资料。<br>
             *选择标签：选择一个或者多个标签，用逗号隔开。<br>
+            <hr>
+
         </div>
     </div>
 </div>

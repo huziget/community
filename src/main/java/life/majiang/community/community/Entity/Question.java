@@ -18,4 +18,5 @@ public class Question {
     private Integer viewCount;
     private Integer CommentCount;
     private Integer likeCount;
+    private Long gmtUpdateData;
 }

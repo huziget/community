@@ -1,0 +1,2 @@
+alter table QUESTION
+  add GMT_UPDATEDATA BIGINT;

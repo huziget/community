@@ -4,7 +4,7 @@ import life.majiang.community.community.Entity.Question;
 import life.majiang.community.community.Entity.User;
 import life.majiang.community.community.Mapper.QuestionMapper;
 import life.majiang.community.community.Mapper.UserMapper;
-import org.apache.ibatis.annotations.Param;
+import life.majiang.community.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -32,6 +31,9 @@ public class PublishController {
     private QuestionMapper questionMapper;
 
     @Autowired
+    private QuestionService questionService;
+
+    @Autowired
     private UserMapper userMapper;
 
     /**
@@ -47,7 +49,9 @@ public class PublishController {
     public String doPublish(
             @RequestParam("title") String title,
             @RequestParam("description") String description,
-            @RequestParam("tag") String tag, HttpServletRequest request,
+            @RequestParam("tag") String tag,
+            @RequestParam("id") Integer id,
+            HttpServletRequest request,
             Model model) {
         //把值存入Model
         model.addAttribute("title",title);
@@ -79,13 +83,11 @@ public class PublishController {
         //新建问题容器，把从cookie得到的用户信息导入到容器中
         Question question = new Question();
         question.setTag(tag);
+        question.setId(id);
         question.setTitle(title);
         question.setDescription(description);
-        question.setCreator(user.getId());
-        question.setGmtCreate(user.getGmtCreate());
-        question.setGmtModified(user.getGmtModified());
-        //添加到数据库
-        questionMapper.create(question);
+        //去校验更新或者添加
+        questionService.editOrAddQuestion(question,user);
         //返回主页
         return "redirect:/";
     }
@@ -101,6 +103,7 @@ public class PublishController {
         model.addAttribute("title",question.getTitle());
         model.addAttribute("description",question.getDescription());
         model.addAttribute("tag",question.getTag());
+        model.addAttribute("id",question.getId());
         return "publish";
     }
 }

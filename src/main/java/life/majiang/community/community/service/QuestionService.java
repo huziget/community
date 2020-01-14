@@ -33,32 +33,8 @@ public class QuestionService {
      * @param size
      */
     public PaginationDTO searchQuestionList(Integer page, Integer size) {
-        PaginationDTO paginationDTO = new PaginationDTO();
-        //数据总行数
-        Integer questionCount = questionMapper.selectQuestionCount();
-        //分页处理
-        paginationDTO.setPagination(questionCount, page, size);
-        //分页公式转换
-        Integer offset = size*(paginationDTO.getPage()-1);
-        //从数据获取问题列表
-        List<QuestionDTO> questionDTOList = new ArrayList<>();
-        //获取分页数据
-        List<Question> questions = questionMapper.List(offset, size);
-        //循环列表
-        for(Question question: questions){
-            //通过问题对象中的ID 查询USER
-            User user = userMapper.findById(question.getCreator());
-            QuestionDTO questionDTO = new QuestionDTO();
-            //把Question对象的值拷贝到Question的对象
-            BeanUtils.copyProperties(question,questionDTO);
-            //用户对象的值赋值到question
-            questionDTO.setUser(user);
-            //加入到DTO集合（questionDTO）
-            questionDTOList.add(questionDTO);
-        }
-        //把所有数据传入到pagination
-        paginationDTO.setQuestions(questionDTOList);
-        //返回值
+        //调用获取数据方法
+        PaginationDTO paginationDTO = this.questionPage(new Integer(0), page, size, true);
         return paginationDTO;
     }
 
@@ -70,32 +46,8 @@ public class QuestionService {
      * @return
      */
     public PaginationDTO serchOurselvesQuestions(Integer userId, Integer page, Integer size) {
-        PaginationDTO paginationDTO = new PaginationDTO();
-        //数据总行数
-        Integer questionCount = questionMapper.selectOurselvesQuestionCount(userId);
-        //分页处理
-        paginationDTO.setPagination(questionCount, page, size);
-        //分页公式转换
-        Integer offset = size*(paginationDTO.getPage()-1);
-        //从数据获取问题列表
-        List<QuestionDTO> questionDTOList = new ArrayList<>();
-        //获取分页数据
-        List<Question> questions = questionMapper.selectOurselvesQuestions(userId,offset, size);
-        //循环列表
-        for(Question question: questions){
-            //通过问题对象中的ID 查询USER
-            User user = userMapper.findById(question.getCreator());
-            QuestionDTO questionDTO = new QuestionDTO();
-            //把Question对象的值拷贝到Question的对象
-            BeanUtils.copyProperties(question,questionDTO);
-            //用户对象的值赋值到question
-            questionDTO.setUser(user);
-            //加入到DTO集合（questionDTO）
-            questionDTOList.add(questionDTO);
-        }
-        //把所有数据传入到pagination
-        paginationDTO.setQuestions(questionDTOList);
-        //返回值
+        //调用获取数据方法
+        PaginationDTO paginationDTO = this.questionPage(userId, page, size, false);
         return paginationDTO;
     }
 
@@ -115,5 +67,78 @@ public class QuestionService {
         //放入DTO
         questionDTO.setUser(user);
         return questionDTO;
+    }
+
+    /**
+     *更新或者添加问题
+     * @param question
+     * @param user
+     */
+    public void editOrAddQuestion(Question question, User user) {
+        Question  questionData = questionMapper.selectById(question.getId());
+        if(questionData == null){
+            //新增问题.
+            question.setCreator(user.getId());
+            question.setGmtCreate(user.getGmtCreate());
+            question.setGmtModified(user.getGmtModified());
+            questionMapper.create(question);
+        }else {
+            //更新问题
+            question.setGmtUpdateData(user.getGmtModified());
+            questionMapper.updateQuestion(question);
+        }
+    }
+
+    /**
+     * 封装公用的问题列表方法
+     * @param userId
+     * @param page
+     * @param size
+     * @param allOrOurselves
+     * @return
+     */
+    public PaginationDTO questionPage(Integer userId, Integer page, Integer size,Boolean allOrOurselves){
+        PaginationDTO paginationDTO = new PaginationDTO();
+        Integer questionCount;
+        List<Question> questions;
+        //数据总行数
+        if(allOrOurselves){
+            //如果为ture 就是查询全部的问题
+            questionCount = questionMapper.selectQuestionCount();
+        }else{
+            //查询Id的问题
+            questionCount = questionMapper.selectOurselvesQuestionCount(userId);
+        }
+
+        //分页处理
+        paginationDTO.setPagination(questionCount, page, size);
+        //分页公式转换
+        Integer offset = size*(paginationDTO.getPage()-1);
+        //从数据获取问题列表
+        List<QuestionDTO> questionDTOList = new ArrayList<>();
+        //获取分页数据
+        if(allOrOurselves){
+           //如果为ture 就是查询全部的问题
+             questions = questionMapper.List(offset, size);
+        }else{
+            //查询Id的问题
+            questions = questionMapper.selectOurselvesQuestions(userId,offset, size);
+        }
+        //循环列表
+        for(Question question: questions){
+            //通过问题对象中的ID 查询USER
+            User user = userMapper.findById(question.getCreator());
+            QuestionDTO questionDTO = new QuestionDTO();
+            //把Question对象的值拷贝到Question的对象
+            BeanUtils.copyProperties(question,questionDTO);
+            //用户对象的值赋值到question
+            questionDTO.setUser(user);
+            //加入到DTO集合（questionDTO）
+            questionDTOList.add(questionDTO);
+        }
+        //把所有数据传入到pagination
+        paginationDTO.setQuestions(questionDTOList);
+        //返回值
+        return paginationDTO;
     }
 }

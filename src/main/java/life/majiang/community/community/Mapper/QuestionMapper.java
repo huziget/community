@@ -2,10 +2,7 @@ package life.majiang.community.community.Mapper;
 
 import life.majiang.community.community.Entity.Question;
 import life.majiang.community.community.dto.QuestionDTO;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -64,4 +61,11 @@ public interface QuestionMapper {
      */
     @Select("select * from question where id = #{id}")
     Question selectById(@Param("id") Integer id);
+
+    /**
+     * 更新问题
+     * @param question
+     */
+    @Update("update question set title = #{title},description = #{description},tag = #{tag},GMT_UPDATEDATA = #{gmtUpdateData} where id = #{id}")
+    void updateQuestion(Question question);
 }
