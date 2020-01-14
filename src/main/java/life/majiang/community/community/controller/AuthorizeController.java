@@ -82,11 +82,23 @@ public class AuthorizeController {
         }
     }
 
+    /**
+     * 退出登录
+     * @param request
+     * @param response
+     * @return
+     */
     @GetMapping("/loginOut")
     public String loginOut(HttpServletRequest request,HttpServletResponse response){
+        //在session中移除user
         request.getSession().removeAttribute("user");
-        new Cookie("token",null);
-//        response.addCookie();
+        //新建同名的null token
+        Cookie cookie = new Cookie("token", null);
+        //设置最大的存在时间
+        cookie.setMaxAge(0);
+        //放入响应中
+        response.addCookie(cookie);
+        //返回主页
         return "redirect:/";
     }
 }
