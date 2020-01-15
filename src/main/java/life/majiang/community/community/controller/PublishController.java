@@ -98,7 +98,7 @@ public class PublishController {
      */
     @GetMapping("/publish/{id}")
     public String editQuestin(@PathVariable(name = "id") Integer id,Model model){
-        Question question = questionMapper.selectById(id);
+        Question question = questionMapper.selectByPrimaryKey(id);
         //把值存入Model
         model.addAttribute("title",question.getTitle());
         model.addAttribute("description",question.getDescription());

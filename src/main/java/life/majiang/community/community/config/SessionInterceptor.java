@@ -1,6 +1,7 @@
 package life.majiang.community.community.config;
 
 import life.majiang.community.community.Entity.User;
+import life.majiang.community.community.Entity.UserExample;
 import life.majiang.community.community.Mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
@@ -12,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * @auther huang
@@ -34,10 +36,12 @@ public class SessionInterceptor implements HandlerInterceptor {
                 if (cookie.getName().equals("token")) {
                     //获取token 同时查询数据库，验证存在性
                     String token = cookie.getValue();
-                    User user = userMapper.findByToken(token);
+                    UserExample userExample = new UserExample();
+                    userExample.createCriteria().andTokenEqualTo(token);
+                    List<User> users = userMapper.selectByExample(userExample);
                     //存在则写入Session
-                    if (user != null) {
-                        request.getSession().setAttribute("user", user);
+                    if (users.size() != 0) {
+                        request.getSession().setAttribute("user", users.get(0));
                     }
                     break;
                 }
