@@ -49,3 +49,8 @@ body{
 .community-questionDate{
     margin-top: 10px;
 }
+
+.error-background{
+    background-image:url(images/errorGit.gif);
+    background-repeat:no-repeat;
+}
