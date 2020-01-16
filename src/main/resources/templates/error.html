@@ -13,9 +13,8 @@
 <div th:insert="~{navigation :: nav}"></div>
 <div class="container-fluid ">
         <div class="jumbotron">
-            <h1>老人家手抖，出错了......</h1>
+            <h1>老人家手抖，出错了......</h1><p th:text="${message}"></p>
             <img src="/css/images/errorGit.gif" style="height: 200px;width: 200px;">
-            <p th:text="${message}">可能服务器爆炸了，我们正在抢修中......</p>
             <p><a class="btn btn-primary btn-lg" href="/" role="button">回到主页</a></p>
         </div>
 </div>

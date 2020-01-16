@@ -1,13 +1,11 @@
 package life.majiang.community.community.advice;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import life.majiang.community.community.exception.CustomizeException;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * @auther huang
@@ -16,18 +14,20 @@ import javax.servlet.http.HttpServletRequest;
 @ControllerAdvice
 public class CustomizeEexcptionHandler {
 
-    @ExceptionHandler()
-    ModelAndView handler(HttpServletRequest request, Throwable ex){
-        HttpStatus status = getStatus(request);
+    /**
+     * 异常处理器
+     */
+    @ExceptionHandler(Exception.class)
+    ModelAndView handler(Throwable ex, Model model) {
+        //判断穿过来的异常是不是我们定义的
+        if (ex instanceof CustomizeException) {
+            //返回我们定义的异常的信息
+            model.addAttribute("message", ex.getMessage());
+        } else {
+            //返回通用的信息
+            model.addAttribute("message", "服务器炸了,攻城狮正在修复.....");
+        }
+        //跳转到错误提示页
         return new ModelAndView("error");
     }
-
-    private HttpStatus getStatus(HttpServletRequest request) {
-        Integer statusCode = (Integer)request.getAttribute("javax.servlet.error.status_code");
-        if(statusCode == null){
-            return HttpStatus.INTERNAL_SERVER_ERROR;
-        }
-        return HttpStatus.valueOf(statusCode);
-    }
-
 }

@@ -8,6 +8,8 @@ import life.majiang.community.community.Mapper.QuestionMapper;
 import life.majiang.community.community.Mapper.UserMapper;
 import life.majiang.community.community.dto.PaginationDTO;
 import life.majiang.community.community.dto.QuestionDTO;
+import life.majiang.community.community.exception.CustomizeErrorCode;
+import life.majiang.community.community.exception.CustomizeException;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +64,9 @@ public class QuestionService {
     public QuestionDTO serchById(Integer id) {
         //根据ID获取问题
         Question question = questionMapper.selectByPrimaryKey(id);
+        if(question == null){
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+        }
         QuestionDTO questionDTO = new QuestionDTO();
         //把结果copy到DTO中
         BeanUtils.copyProperties(question,questionDTO);
@@ -95,7 +100,12 @@ public class QuestionService {
             updateQuestion.setDescription(question.getDescription());
             QuestionExample example = new QuestionExample();
             example.createCriteria().andIdEqualTo(question.getId());
-            questionMapper.updateByExampleSelective(updateQuestion, example);
+            int update = questionMapper.updateByExampleSelective(updateQuestion, example);
+            //判断数据是否更新成功
+            if(update != 1){
+                //抛出一个异常
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+            }
         }
     }
 
