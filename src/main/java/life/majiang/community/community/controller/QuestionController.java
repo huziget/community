@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * @auther huang
@@ -24,6 +25,7 @@ public class QuestionController {
      * @param model
      * @return
      */
+    @ResponseBody
     @GetMapping("/question/{id}")
     public String question(@PathVariable(name = "id") Integer id,Model model){
         //获取问题详情
