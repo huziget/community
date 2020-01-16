@@ -18,10 +18,21 @@ public class QuestionController {
     @Autowired
     private QuestionService questionService;
 
+    /**
+     * 访问问题详情
+     * @param id
+     * @param model
+     * @return
+     */
     @GetMapping("/question/{id}")
     public String question(@PathVariable(name = "id") Integer id,Model model){
+        //获取问题详情
         QuestionDTO questionDTO = questionService.serchById(id);
+        //每次访问增加浏览次数
+        questionService.incView(id);
+        //载入model
         model.addAttribute("question",questionDTO);
+        //转到question页面
         return "question";
     }
 }

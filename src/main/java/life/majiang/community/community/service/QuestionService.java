@@ -4,6 +4,7 @@ import life.majiang.community.community.Entity.Question;
 import life.majiang.community.community.Entity.QuestionExample;
 import life.majiang.community.community.Entity.User;
 import life.majiang.community.community.Entity.UserExample;
+import life.majiang.community.community.Mapper.QuestionExtMapper;
 import life.majiang.community.community.Mapper.QuestionMapper;
 import life.majiang.community.community.Mapper.UserMapper;
 import life.majiang.community.community.dto.PaginationDTO;
@@ -30,6 +31,9 @@ public class QuestionService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private QuestionExtMapper questionExtMapper;
 
     /**
      * 获取所有问题列表
@@ -89,6 +93,9 @@ public class QuestionService {
             question.setCreator(user.getId());
             question.setGmtCreate(user.getGmtCreate());
             question.setGmtModified(user.getGmtModified());
+            question.setViewCount(0);
+            question.setCommentCount(0);
+            question.setLikeCount(0);
             questionMapper.insert(question);
         }else {
             //更新问题
@@ -164,5 +171,38 @@ public class QuestionService {
         paginationDTO.setQuestions(questionDTOList);
         //返回值
         return paginationDTO;
+    }
+
+    /**
+     * 增加问题的浏览次数
+     * @param id
+     */
+    public void incView(Integer id) {
+//次方法存在并发异常，暂时弃用
+//        //先从数据库查询出浏览数
+//        Question question = questionMapper.selectByPrimaryKey(id);
+//        //新建容器把浏览数+1，同时更新时间
+//        Integer viewCount;
+//        Question updateQuestion = new Question();
+//        //判断阅读数是否为空
+//        if (question.getViewCount() == null) {
+//            viewCount = 1;
+//        } else {
+//            viewCount = question.getViewCount() + 1;
+//        }
+//        updateQuestion.setViewCount(viewCount);
+//        updateQuestion.setGmtUpdatedata(System.currentTimeMillis());
+//        //使用mybatis generator 生成器  加入ID
+//        QuestionExample questionExample = new QuestionExample();
+//        questionExample.createCriteria().andIdEqualTo(id);
+//        questionMapper.updateByExampleSelective(updateQuestion, questionExample);
+        //更新数据库
+        Question question = new Question();
+        question.setGmtUpdatedata(System.currentTimeMillis());
+        question.setId(id);
+        //每次递增1
+        question.setViewCount(1);
+        //更新
+        questionExtMapper.incView(question);
     }
 }
