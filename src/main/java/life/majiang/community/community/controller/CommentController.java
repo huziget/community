@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @auther huang
  * @date 2020/1/16 16:28
@@ -38,7 +41,8 @@ public class CommentController {
         comment.setLikeCount(0L);
         //插入到数据库
         commentMapper.insert(comment);
-        //跳转到主页
-        return null;
+        Map<Object, Object> objectObjectHashMap = new HashMap<>();
+        objectObjectHashMap.put("message","成功");
+        return objectObjectHashMap;
     }
 }
