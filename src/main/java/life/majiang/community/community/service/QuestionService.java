@@ -3,7 +3,6 @@ package life.majiang.community.community.service;
 import life.majiang.community.community.Entity.Question;
 import life.majiang.community.community.Entity.QuestionExample;
 import life.majiang.community.community.Entity.User;
-import life.majiang.community.community.Entity.UserExample;
 import life.majiang.community.community.Mapper.QuestionExtMapper;
 import life.majiang.community.community.Mapper.QuestionMapper;
 import life.majiang.community.community.Mapper.UserMapper;
@@ -43,7 +42,7 @@ public class QuestionService {
      */
     public PaginationDTO searchQuestionList(Integer page, Integer size) {
         //调用获取数据方法
-        PaginationDTO paginationDTO = this.questionPage(new Integer(0), page, size, true);
+        PaginationDTO paginationDTO = this.questionPage(new Long(0), page, size, true);
         return paginationDTO;
     }
 
@@ -54,7 +53,7 @@ public class QuestionService {
      * @param size
      * @return
      */
-    public PaginationDTO serchOurselvesQuestions(Integer userId, Integer page, Integer size) {
+    public PaginationDTO serchOurselvesQuestions(Long userId, Integer page, Integer size) {
         //调用获取数据方法
         PaginationDTO paginationDTO = this.questionPage(userId, page, size, false);
         return paginationDTO;
@@ -65,7 +64,7 @@ public class QuestionService {
      * @param id
      * @return
      */
-    public QuestionDTO serchById(Integer id) {
+    public QuestionDTO serchById(Long id) {
         //根据ID获取问题
         Question question = questionMapper.selectByPrimaryKey(id);
         if(question == null){
@@ -124,7 +123,7 @@ public class QuestionService {
      * @param allOrOurselves
      * @return
      */
-    public PaginationDTO questionPage(Integer userId, Integer page, Integer size,Boolean allOrOurselves){
+    public PaginationDTO questionPage(Long userId, Integer page, Integer size,Boolean allOrOurselves){
         PaginationDTO paginationDTO = new PaginationDTO();
         Integer questionCount;
         List<Question> questions;
@@ -177,7 +176,7 @@ public class QuestionService {
      * 增加问题的浏览次数
      * @param id
      */
-    public void incView(Integer id) {
+    public void incView(Long id) {
 //次方法存在并发异常，暂时弃用
 //        //先从数据库查询出浏览数
 //        Question question = questionMapper.selectByPrimaryKey(id);

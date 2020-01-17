@@ -50,7 +50,7 @@ public class PublishController {
             @RequestParam("title") String title,
             @RequestParam("description") String description,
             @RequestParam("tag") String tag,
-            @RequestParam("id") Integer id,
+            @RequestParam("id") Long id,
             HttpServletRequest request,
             Model model) {
         //把值存入Model
@@ -97,7 +97,7 @@ public class PublishController {
      * @return
      */
     @GetMapping("/publish/{id}")
-    public String editQuestin(@PathVariable(name = "id") Integer id,Model model){
+    public String editQuestin(@PathVariable(name = "id") Long id,Model model){
         Question question = questionMapper.selectByPrimaryKey(id);
         //把值存入Model
         model.addAttribute("title",question.getTitle());

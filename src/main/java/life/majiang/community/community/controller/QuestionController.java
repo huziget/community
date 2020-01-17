@@ -1,5 +1,6 @@
 package life.majiang.community.community.controller;
 
+import life.majiang.community.community.Entity.User;
 import life.majiang.community.community.dto.QuestionDTO;
 import life.majiang.community.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @auther huang
@@ -25,9 +28,8 @@ public class QuestionController {
      * @param model
      * @return
      */
-    @ResponseBody
     @GetMapping("/question/{id}")
-    public String question(@PathVariable(name = "id") Integer id,Model model){
+    public String question(@PathVariable(name = "id") Long id, Model model){
         //获取问题详情
         QuestionDTO questionDTO = questionService.serchById(id);
         //每次访问增加浏览次数
