@@ -10,6 +10,7 @@ import life.majiang.community.community.exception.CustomizeErrorCode;
 import life.majiang.community.community.exception.CustomizeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @auther huang
@@ -32,6 +33,7 @@ public class CommentService {
      *
      * @param comment
      */
+    @Transactional
     public void addComment(Comment comment) {
         //过去回复人的ID。如果为null就报错
         if (comment.getParentId() == null || comment.getParentId() == 0) {
