@@ -9,6 +9,17 @@
     <script src="js/jquery-3.4.1.min.js"></script>
     <script src="js/bootstrap.min.js" type="application/javascript"></script>
 </head>
+<script type="application/javascript">
+    //验证localStorage的参数，来决定是否关闭当页
+    window.onload = function () {
+        var closable = window.localStorage.getItem("closable");
+        if (closable == "true") {
+            //关闭当页，并删除参数
+            window.close();
+            window.localStorage.removeItem("closable");
+        }
+    }
+</script>
 <body>
 <div th:insert="~{navigation :: nav}"></div>
 <div class="container-fluid main">
@@ -19,15 +30,15 @@
             <div class="media" th:each="question : ${pagination.questions}">
                 <div class="media-left">
                     <a href="#">
-<!--                        <img class="media-images img-rounded" style="height: 38px;width: 38px;"-->
-<!--                             th:if="${question.user.avatarUrl == null}">-->
+                        <!--                        <img class="media-images img-rounded" style="height: 38px;width: 38px;"-->
+                        <!--                             th:if="${question.user.avatarUrl == null}">-->
                         <img class="media-object img-rounded" style="height: 38px;width: 38px;"
                              th:src="${question.user.avatarUrl}" th:if="${question.user.avatarUrl != null}">
                     </a>
                 </div>
                 <div class="media-body">
                     <h4 class="media-heading">
-                    <a th:href="@{'/question/'+${question.id}}" th:text="${question.title}"></a></h4>
+                        <a th:href="@{'/question/'+${question.id}}" th:text="${question.title}"></a></h4>
                     <span th:text="${question.description}"></span><br>
                     <span class="text-desc"><span th:text="${question.commentCount}"></span> 个回复 * <span
                             th:text="${question.viewCount}"></span> 次浏览 * <span
@@ -47,7 +58,7 @@
                         </a>
                     </li>
                     <li th:each="page : ${pagination.pages}" th:class="${pagination.page == page}?'active':''">
-                        <a th:text="${page}" th:href="@{/(page=${page})}" >
+                        <a th:text="${page}" th:href="@{/(page=${page})}">
                         </a></li>
                     <li th:if="${pagination.showNext}">
                         <a th:href="@{/(page=${pagination.page+1})}" aria-label="Next">
@@ -60,15 +71,16 @@
                         </a>
                     </li>
                     <li class="dropup">
-                            <a class="btn btn-default dropdown-toggle" th:text="${pagination.size}+'页 ▲'" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                                <li><a th:href="@{/(page=${pagination.page},size = 5)}">5</a></li>
-                                <li><a th:href="@{/(page=${pagination.page},size = 10)}">10</a></li>
-                                <li><a th:href="@{/(page=${pagination.page},size = 20)}">20</a></li>
-                                <li><a th:href="@{/(page=${pagination.page},size = 50)}">50</a></li>
-                            </ul>
+                        <a class="btn btn-default dropdown-toggle" th:text="${pagination.size}+'页 ▲'" type="button"
+                           id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                            <li><a th:href="@{/(page=${pagination.page},size = 5)}">5</a></li>
+                            <li><a th:href="@{/(page=${pagination.page},size = 10)}">10</a></li>
+                            <li><a th:href="@{/(page=${pagination.page},size = 20)}">20</a></li>
+                            <li><a th:href="@{/(page=${pagination.page},size = 50)}">50</a></li>
+                        </ul>
                     </li>
                 </ul>
             </nav>
@@ -78,7 +90,7 @@
         </div>
     </div>
 </div>
-<div style="text-align: center;color: #999999" >Designed and built with all the love in the world by @mdo and @fat. <br>
+<div style="text-align: center;color: #999999">Designed and built with all the love in the world by @mdo and @fat. <br>
     Maintained by the core team with the help of<br>
     our contributors.
     本项目源码受 MIT开源协议保护，文档受 CC BY 3.0 开源协议保护。<br>
