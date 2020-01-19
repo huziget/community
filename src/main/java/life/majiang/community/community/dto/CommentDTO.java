@@ -1,5 +1,6 @@
 package life.majiang.community.community.dto;
 
+import life.majiang.community.community.Entity.User;
 import lombok.Data;
 
 
@@ -12,4 +13,8 @@ public class CommentDTO {
     private Long parentId;
     private String content;
     private Integer type;
+    private User user;
+    private Long likeCount;
+    private Long gmtCreate;
+    private Long gmtModified;
 }

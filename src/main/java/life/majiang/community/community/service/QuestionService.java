@@ -1,13 +1,14 @@
 package life.majiang.community.community.service;
 
-import life.majiang.community.community.Entity.Question;
-import life.majiang.community.community.Entity.QuestionExample;
-import life.majiang.community.community.Entity.User;
+import life.majiang.community.community.Entity.*;
+import life.majiang.community.community.Mapper.CommentMapper;
 import life.majiang.community.community.Mapper.QuestionExtMapper;
 import life.majiang.community.community.Mapper.QuestionMapper;
 import life.majiang.community.community.Mapper.UserMapper;
+import life.majiang.community.community.dto.CommentDTO;
 import life.majiang.community.community.dto.PaginationDTO;
 import life.majiang.community.community.dto.QuestionDTO;
+import life.majiang.community.community.enums.CommentTypeEnum;
 import life.majiang.community.community.exception.CustomizeErrorCode;
 import life.majiang.community.community.exception.CustomizeException;
 import org.apache.ibatis.session.RowBounds;
@@ -17,6 +18,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @auther huang
@@ -33,6 +37,9 @@ public class QuestionService {
 
     @Autowired
     private QuestionExtMapper questionExtMapper;
+
+    @Autowired
+    private CommentMapper commentMapper;
 
     /**
      * 获取所有问题列表
@@ -203,5 +210,59 @@ public class QuestionService {
         question.setViewCount(1);
         //更新
         questionExtMapper.incView(question);
+    }
+
+    /**
+     * 获取评论详情(我的做法)
+     * @param id
+     * @return
+     */
+    public List<CommentDTO> searchCommentById(Long id) {
+        //根据问题的ID  查询有关于该问题的评论
+        CommentExample example = new CommentExample();
+        example.createCriteria().andParentIdEqualTo(id).andTypeEqualTo(CommentTypeEnum.QUESTION.getType());
+        List<Comment> comments = commentMapper.selectByExample(example);
+        List<CommentDTO> commentDTOS = new ArrayList<>();
+        //循环该评论
+        for (Comment comment : comments) {
+            //通过评论对象中的Commentor 查询USER
+            User user = userMapper.selectByPrimaryKey(comment.getCommentor());
+            CommentDTO commentDTO = new CommentDTO();
+            commentDTO.setUser(user);
+            //把comment中数据复制到CommentDTO
+            BeanUtils.copyProperties(comment,commentDTO);
+            //放入list集合
+            commentDTOS.add(commentDTO);
+        }
+        return commentDTOS;
+    }
+
+    /**
+     * 视频 UP主的方法。比我的好  有技术含量
+     * @param id
+     * @return
+     */
+    public List<CommentDTO> searchCommentList(Long id){
+        //根据问题的ID  查询有关于该问题的评论
+        CommentExample example = new CommentExample();
+        example.createCriteria().andParentIdEqualTo(id).andTypeEqualTo(CommentTypeEnum.QUESTION.getType());
+        List<Comment> comments = commentMapper.selectByExample(example);
+
+        if(comments.size() == 0){
+            //如果评论为空 就返回空LIST
+            return new ArrayList<>();
+        }
+        //把Comments 放入MAP集合中
+        Set<Long> commentors = comments.stream().map(comment -> comment.getCommentor()).collect(Collectors.toSet());
+        //set转List
+        List<Long> userIds = new ArrayList<>();
+        userIds.addAll(commentors);
+        //查询user对象
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andIdIn(userIds);
+        List<User> users = userMapper.selectByExample(userExample);
+        //把user对象放入MAP中
+        Map<Long, User> userMap = users.stream().collect(Collectors.toMap(user -> user.getId(), user -> user));
+        return null;
     }
 }
