@@ -1,3 +1,6 @@
+/**
+ * 提交回复
+ */
 function reflexComment() {
     var questionId = $("#question_id").val();
     var commentContent = $("#comment_content").val();
@@ -31,4 +34,12 @@ function reflexComment() {
         },
         dataType: "json"
     });
+}
+
+/**
+ * 展开二级评论
+ */
+function collapseComments() {
+    var data = $.data(this,"id");
+    console.log(data);
 }
